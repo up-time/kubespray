@@ -2,7 +2,6 @@ ANSIBLE_INVENTORY ?= inventory/akash-provider
 KUBE_SPRAY_DIR ?= ../../../kubernetes-sigs/kubespray/
 IPS ?= 10.88.134.5
 
-
 # Pip3 setup
 # OS Packages to install: python3-pip, python3-venv
 
@@ -32,8 +31,8 @@ ansible-deploy:
 	# installing packages and interacting with various systemd daemons.
 	# Without --become the playbook will fail to run!
 	#ansible-playbook -i "$(ANSIBLE_INVENTORY)/hosts.yaml" --diff -vvvv --become --become-user=root cluster.yaml
-	ansible-playbook -i "$(ANSIBLE_INVENTORY)/hosts.yaml" --diff --check -vvvv --become --become-user=root cluster.yaml
-	#ansible-playbook -i "$(ANSIBLE_INVENTORY)/hosts.yaml"  --become --become-user=root cluster.yaml
+	#ansible-playbook -i "$(ANSIBLE_INVENTORY)/hosts.yaml" --diff --check -vvvv --become --become-user=root cluster.yaml
+	ansible-playbook -i "$(ANSIBLE_INVENTORY)/hosts.yaml" --diff --become --become-user=root cluster.yaml
 
 .PHONY: ansible-facts
 ansible-facts:

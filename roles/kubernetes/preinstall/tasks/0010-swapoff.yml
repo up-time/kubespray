@@ -15,4 +15,7 @@
   changed_when: no
 - name: Disable swap
   command: /sbin/swapoff -a
-  when: swapon.stdout
+  when: 
+    - not ansible_check_mode
+    - swapon.stdout
+# Fix derived from: https://github.com/kubernetes-sigs/kubespray/issues/4967#issuecomment-510604422
