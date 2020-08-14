@@ -1,0 +1,29 @@
+all:
+  hosts:
+    node1:
+      ansible_host: 139.178.89.165
+      ip: 139.178.89.165
+      access_ip: 139.178.89.165
+  children:
+    packet:
+      hosts:
+        node1:
+      vars:
+        ansible_user: root
+    kube-master:
+      hosts:
+        node1:
+          cluster_id: "akash-provider"
+    kube-node:
+      hosts:
+        node1:
+    etcd:
+      hosts:
+        node1:
+    k8s-cluster:
+      children:
+        kube-master:
+        kube-node:
+            #    calico-rr:
+            #      hosts:
+            #        node1:
