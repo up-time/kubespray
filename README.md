@@ -1,4 +1,26 @@
-# Deploy a Production Ready Kubernetes Cluster
+# Akash Provider Kubespray
+
+This project provides an Ansible Kubespray tool to install a Kubernetes cluster with necessary featuers to run an Akash network Provider. 
+
+## Node Configuration
+
+How an Akash Provider provisions their compute capacity is specific to each individual Akash network Provider. Bare metal, Colocation racks, ARM stacks, KVM, Cloud providers, etc. 
+
+### Kubernetes Requirements
+
+* Provider can access and has admin control of Kubernetes API
+* Ingress Controller(Nginx, Ambassador, Cloud Provided, ...)
+* `metrics-server` running
+
+The Provier communicates with an Kubernetes API to detect capacity, and manage available resources. How that Kubernetes API is provided does not matter. K3s, 
+
+
+## Provider Configuration
+
+Follow the [`Akash Provider`](https://github.com/ovrclk/akash/blob/master/_docs/examples/provider/README.md) documentation. Create key(keep it secret, keep it safe),  to intialize the container, and 
+
+
+# Kubespray: Deploy a Production Ready Kubernetes Cluster
 
 ![Kubernetes Logo](https://raw.githubusercontent.com/kubernetes-sigs/kubespray/master/docs/img/kubernetes-logo.png)
 
@@ -40,6 +62,12 @@ cat inventory/mycluster/group_vars/k8s-cluster/k8s-cluster.yml
 # Without --become the playbook will fail to run!
 ansible-playbook -i inventory/mycluster/hosts.yaml  --become --become-user=root cluster.yml
 ```
+
+### Akash Modification 
+
+Kubespray configures Calico to use Calico's RR service + BGP for IP-IP networking. While this is an option for operation, [VXLAN Overlay networking](https://docs.projectcalico.org/networking/vxlan-ipip) is a nice simplification, and removes the necessity for `calico-rr` to be installed. After running `invetory.py` and `hosts.yaml` is generated, edit the file and remove the `calico-rr` references for cleanliness. See "Network Plugins" below for additional configuration options.
+
+#### Usage Continued
 
 Note: When Ansible is already installed via system packages on the control machine, other python packages installed via `sudo pip install -r requirements.txt` will go to a different directory tree (e.g. `/usr/local/lib/python2.7/dist-packages` on Ubuntu) from Ansible's (e.g. `/usr/lib/python2.7/dist-packages/ansible` still on Ubuntu).
 As a consequence, `ansible-playbook` command will fail with:
