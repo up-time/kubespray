@@ -24,6 +24,3 @@ all:
       children:
         kube-master:
         kube-node:
-            #    calico-rr:
-            #      hosts:
-            #        node1:

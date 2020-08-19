@@ -1,4 +1,5 @@
 ANSIBLE_INVENTORY ?= inventory/akash-provider
+INVENTORY_FILE ?= cluster.yml
 KUBE_SPRAY_DIR ?= ../../../kubernetes-sigs/kubespray/
 IPS ?= 10.88.134.5
 
@@ -30,9 +31,21 @@ ansible-deploy:
 	# The option `--become` is required, as for example writing SSL keys in /etc/,
 	# installing packages and interacting with various systemd daemons.
 	# Without --become the playbook will fail to run!
-	#ansible-playbook -i "$(ANSIBLE_INVENTORY)/hosts.yaml" --diff -vvvv --become --become-user=root cluster.yaml
-	#ansible-playbook -i "$(ANSIBLE_INVENTORY)/hosts.yaml" --diff --check -vvvv --become --become-user=root cluster.yaml
-	ansible-playbook -i "$(ANSIBLE_INVENTORY)/hosts.yaml" --diff --become --become-user=root cluster.yaml
+	#ansible-playbook -i "$(ANSIBLE_INVENTORY)/hosts.yaml" --diff -vvvv --become --become-user=root "$(INVENTORY_FILE)"
+	#ansible-playbook -i "$(ANSIBLE_INVENTORY)/hosts.yaml" --diff --check -vvvv --become --become-user=root "$(INVENTORY_FILE)"
+	ansible-playbook -i "$(ANSIBLE_INVENTORY)/hosts.yaml" --diff --become --become-user=root "$(INVENTORY_FILE)"
+
+.PHONY: ansible-tags
+ansible-tags:
+	ansible-playbook -i "$(ANSIBLE_INVENTORY)/hosts.yaml" --check --diff -vvvv --list-tags --become --become-user=root "$(INVENTORY_FILE)"
+
+.PHONY: ansible-hosts
+ansible-hosts:
+	ansible-playbook -i "$(ANSIBLE_INVENTORY)/hosts.yaml" --check --diff -vvvv --list-hosts --become --become-user=root "$(INVENTORY_FILE)"
+
+.PHONY: ansible-tasks
+ansible-tasks:
+	ansible-playbook -i "$(ANSIBLE_INVENTORY)/hosts.yaml" --check --diff -vvvv --list-tasks --become --become-user=root "$(INVENTORY_FILE)"
 
 .PHONY: ansible-facts
 ansible-facts:
