@@ -4,20 +4,18 @@ This project provides an Ansible Kubespray tool to install a Kubernetes cluster 
 
 ## Node Configuration
 
-How an Akash Provider provisions their compute capacity is specific to each individual Akash network Provider. Bare metal, Colocation racks, ARM stacks, KVM, Cloud providers, etc. 
+How an Akash Provider provisions their compute capacity is specific to each individual Akash network Provider. Bare metal, Colocation racks, ARM stacks, KVM, Cloud providers, etc. The Provier communicates with an Kubernetes API to detect capacity, and manage available resources. How that Kubernetes API is provided does not necessarily matter. K3s, kubeadm, Kops, in this case; Kubespray.
 
 ### Kubernetes Requirements
 
 * Provider can access and has admin control of Kubernetes API
-* Ingress Controller(Nginx, Ambassador, Cloud Provided, ...)
+* Ingress Controller(Nginx, Ambassador, Cloud Provider, ...)
 * `metrics-server` running
-
-The Provier communicates with an Kubernetes API to detect capacity, and manage available resources. How that Kubernetes API is provided does not matter. K3s, 
-
+* Logs exported to third party service.
 
 ## Provider Configuration
 
-Follow the [`Akash Provider`](https://github.com/ovrclk/akash/blob/master/_docs/examples/provider/README.md) documentation. Create key(keep it secret, keep it safe),  to intialize the container, and 
+Follow the [`Akash Provider`](https://github.com/ovrclk/akash/blob/master/_docs/examples/provider/README.md) documentation. Create a `provider` key(keep it secret, keep it safe), declare configuration, create Provider registered on Akash Network, and install into the Kubernetes cluster!
 
 
 # Kubespray: Deploy a Production Ready Kubernetes Cluster
@@ -64,6 +62,8 @@ ansible-playbook -i inventory/mycluster/hosts.yaml  --become --become-user=root 
 ```
 
 ### Akash Modification 
+
+Every Provider can decided how to configure their Kubernetes cluster, these Akash specific changes attempt to simplify configuration as much as reasonably possible.
 
 Kubespray configures Calico to use Calico's RR service + BGP for IP-IP networking. While this is an option for operation, [VXLAN Overlay networking](https://docs.projectcalico.org/networking/vxlan-ipip) is a nice simplification, and removes the necessity for `calico-rr` to be installed. After running `invetory.py` and `hosts.yaml` is generated, edit the file and remove the `calico-rr` references for cleanliness. See "Network Plugins" below for additional configuration options.
 

@@ -1,7 +1,8 @@
 ANSIBLE_INVENTORY ?= inventory/akash-provider
 INVENTORY_FILE ?= cluster.yml
 KUBE_SPRAY_DIR ?= ../../../kubernetes-sigs/kubespray/
-IPS ?= 10.88.134.5
+# TODO: Configure IP addresses(space-separated) for `build-inventor` target
+IPS ?= 10.240.0.0
 
 # Pip3 setup
 # OS Packages to install: python3-pip, python3-venv
@@ -23,7 +24,7 @@ pip-install-requirements:
 
 .PHONY: build-inventory
 build-inventory:
-	CONFIG_FILE="$(ANSIBLE_INVENTORY)/hosts.yaml" python3 $(KUBE_SPRAY_DIR)/contrib/inventory_builder/inventory.py $(IPS)
+	CONFIG_FILE="$(ANSIBLE_INVENTORY)/hosts.yaml" python3 contrib/inventory_builder/inventory.py $(IPS)
 
 .PHONY: ansible-deploy
 ansible-deploy:
@@ -31,8 +32,7 @@ ansible-deploy:
 	# The option `--become` is required, as for example writing SSL keys in /etc/,
 	# installing packages and interacting with various systemd daemons.
 	# Without --become the playbook will fail to run!
-	#ansible-playbook -i "$(ANSIBLE_INVENTORY)/hosts.yaml" --diff -vvvv --become --become-user=root "$(INVENTORY_FILE)"
-	#ansible-playbook -i "$(ANSIBLE_INVENTORY)/hosts.yaml" --diff --check -vvvv --become --become-user=root "$(INVENTORY_FILE)"
+	# ansible-playbook -i "$(ANSIBLE_INVENTORY)/hosts.yaml" --diff --check -vvvv --become --become-user=root "$(INVENTORY_FILE)"
 	ansible-playbook -i "$(ANSIBLE_INVENTORY)/hosts.yaml" --diff --become --become-user=root "$(INVENTORY_FILE)"
 
 .PHONY: ansible-tags

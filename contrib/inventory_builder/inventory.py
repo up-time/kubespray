@@ -43,8 +43,7 @@ import os
 import re
 import sys
 
-ROLES = ['all', 'kube-master', 'kube-node', 'etcd', 'k8s-cluster',
-         'calico-rr']
+ROLES = ['all', 'kube-master', 'kube-node', 'etcd', 'k8s-cluster']
 PROTECTED_NAMES = ROLES
 AVAILABLE_COMMANDS = ['help', 'print_cfg', 'print_ips', 'print_hostnames',
                       'load']
