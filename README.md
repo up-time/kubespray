@@ -1,17 +1,22 @@
 # Akash Provider Kubespray
 
-This project provides an Ansible Kubespray tool to install a Kubernetes cluster with necessary featuers to run an Akash network Provider. 
+This project provides an Ansible Kubespray tool to install a Kubernetes cluster with necessary featuers to run an Akash network Provider with standardized components. 
 
 ## Node Configuration
 
-How an Akash Provider provisions their compute capacity is specific to each individual Akash network Provider. Bare metal, Colocation racks, ARM stacks, KVM, Cloud providers, etc. The Provier communicates with an Kubernetes API to detect capacity, and manage available resources. How that Kubernetes API is provided does not necessarily matter. K3s, kubeadm, Kops, in this case; Kubespray.
+How an Akash Provider provisions their compute capacity is specific to each individual Akash network Provider. Bare metal, Colocation racks, ARM stacks, KVM, Cloud providers, etc. The Provier communicates with an Kubernetes API to detect capacity, and manage available resources. How that Kubernetes API is provided does not necessarily matter. K3s, kubeadm, Kops, in this case; Kubespray installs a Kubernetes cluster on the Host OS.
 
 ### Kubernetes Requirements
 
 * Provider can access and has admin control of Kubernetes API
 * Ingress Controller(Nginx, Ambassador, Cloud Provider, ...)
 * `metrics-server` running
-* Logs exported to third party service.
+* [ ] Logs exported to third party service.
+* [ ] Zero Trust Tennant Networking
+* [ ] Zero Trust Tennant Containers with `seccomp` Profiles
+  * Disable `volumes.hostPath`
+  * Disable `hostNetwork`
+  * Disable container ServiceAccounts: `automountServiceAccountToken: false`
 
 ## Provider Configuration
 
@@ -49,7 +54,7 @@ cp -rfp inventory/sample inventory/mycluster
 # Update Ansible inventory file with inventory builder
 declare -a IPS=(10.10.1.3 10.10.1.4 10.10.1.5)
 CONFIG_FILE=inventory/mycluster/hosts.yaml python3 contrib/inventory_builder/inventory.py ${IPS[@]}
-
+ 
 # Review and change parameters under ``inventory/mycluster/group_vars``
 cat inventory/mycluster/group_vars/all/all.yml
 cat inventory/mycluster/group_vars/k8s-cluster/k8s-cluster.yml
@@ -130,7 +135,7 @@ vagrant up
 
 - **Container Linux by CoreOS**
 - **Debian** Buster, Jessie, Stretch, Wheezy
-- **Ubuntu** 16.04, 18.04
+- **Ubuntu** 16.04, 18.04, Akash Network updated to use 20.04
 - **CentOS/RHEL** 7, 8 (experimental: see [centos 8 notes](docs/centos8.md)
 - **Fedora** 30, 31
 - **Fedora CoreOS** (experimental: see [fcos Note](docs/fcos.md))
