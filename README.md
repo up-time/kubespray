@@ -13,7 +13,7 @@ How an Akash Provider provisions their compute capacity is specific to each indi
 * `metrics-server` running
 * [ ] Logs exported to third party service.
 * [ ] Zero Trust Tennant Networking
-* [ ] Zero Trust Tennant Containers with `seccomp` Profiles
+* [x] Zero Trust Tennant Containers with `seccomp` Profiles
   * Disable `volumes.hostPath`
   * Disable `hostNetwork`
   * Disable container ServiceAccounts: `automountServiceAccountToken: false`
@@ -70,7 +70,7 @@ ansible-playbook -i inventory/mycluster/hosts.yaml  --become --become-user=root 
 
 Every Provider can decided how to configure their Kubernetes cluster, these Akash specific changes attempt to simplify configuration as much as reasonably possible.
 
-Kubespray configures Calico to use Calico's RR service + BGP for IP-IP networking. While this is an option for operation, [VXLAN Overlay networking](https://docs.projectcalico.org/networking/vxlan-ipip) is a nice simplification, and removes the necessity for `calico-rr` to be installed. After running `invetory.py` and `hosts.yaml` is generated, edit the file and remove the `calico-rr` references for cleanliness. See "Network Plugins" below for additional configuration options.
+Kubespray configures Calico to use Calico's RR service + BGP for IP-IP networking. While this is an option for operation, [VXLAN Overlay networking](https://docs.projectcalico.org/networking/vxlan-ipip) is a nice simplification, and removes the necessity for `calico-rr` to be installed. After running `inventory.py` and `hosts.yaml` is generated, edit the file and remove the `calico-rr` references for cleanliness. See "Network Plugins" below for additional configuration options.
 
 #### Usage Continued
 
