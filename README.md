@@ -24,6 +24,24 @@ How an Akash Provider provisions their compute capacity is specific to each indi
 
 Follow the [`Akash Provider`](https://github.com/ovrclk/akash/blob/master/_docs/examples/provider/README.md) documentation. Create a `provider` key(keep it secret, keep it safe), declare configuration, create Provider registered on Akash Network, and install into the Kubernetes cluster!
 
+## Dense Provider considerations
+
+Kubernetes uses a networking model that assigns a single IP address to each deployed pod. Each node
+in a Kubernetes cluster has a range of IP addresses available to it. This means that there is a limit
+to the number of pods that can be hosted on a single node.
+
+For providers with small nodes, this pods per node limit is not a concern. For providers running
+nodes with dense compute configurations (for example, multisocket CPU servers) this can become
+a limiting factor to utilization of the node.
+
+To increase the pods per node limit, 3 steps need to be taken
+
+1. Increase `kube_network_node_prefix` to assign additional IP addresses to a single node.
+2. Increase `kube_pods_subnet` to allow more pods in the kubernetes cluster
+3. Increase `kube_service_addresses` since more services are expected to be running.
+
+These values are configured in the [example configuration here](akash-main/inventory/akash-provider-sample/group_vars/k8s-cluster/k8s-cluster.yml)
+
 # Kubespray: Deploy a Production Ready Kubernetes Cluster
 
 ![Kubernetes Logo](https://raw.githubusercontent.com/kubernetes-sigs/kubespray/master/docs/img/kubernetes-logo.png)
