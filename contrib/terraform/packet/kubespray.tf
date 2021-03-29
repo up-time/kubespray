@@ -1,6 +1,11 @@
 # Configure the Packet Provider
-provider "packet" {
-  version = "~> 2.0"
+terraform {
+  required_providers {
+    packet = {
+      source = "packethost/packet"
+      version = "~> 2.0"
+    }
+  }
 }
 
 resource "packet_ssh_key" "k8s" {
